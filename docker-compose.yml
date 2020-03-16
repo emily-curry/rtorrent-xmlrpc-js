@@ -1,0 +1,8 @@
+version: '2'
+services:
+  rtorrent:
+    image: tuxmealux/alpine-rtorrent
+    ports:
+      - '${XMLRPC_PORT}:16891'
+    container_name: xmlrpc-test-rtorrent
+    restart: 'no'

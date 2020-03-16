@@ -1,0 +1,37 @@
+{
+  "name": "rtorrent-xmlrpc",
+  "version": "0.0.1",
+  "description": "TODO:",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "author": "Emily Curry <emily@curry.sh>",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 10.0.0"
+  },
+  "scripts": {
+    "prebuild": "rimraf {lib,esm}/*",
+    "build": "npm run build:cjs",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:client": "node ./clientGen.js",
+    "test": "jest --runInBand --coverage"
+  },
+  "dependencies": {
+    "node-expat": "^2.3.18",
+    "tslib": "^1.11.1",
+    "xmlrpc": "^1.3.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.3",
+    "@types/node": "^12.12.29",
+    "@types/node-expat": "^2.3.0",
+    "@types/xmlrpc": "^1.3.5",
+    "dotenv": "^8.2.0",
+    "execa": "^4.0.0",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^25.2.1",
+    "typescript": "^3.8.3"
+  }
+}
