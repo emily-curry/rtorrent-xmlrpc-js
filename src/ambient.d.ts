@@ -1,5 +1,3 @@
-///// <reference types="reflect-metadata" />
-
 declare module 'xmlrpc/lib/serializer' {
   export function serializeMethodCall(method: string, params: any[], encoding?: string): string;
 }

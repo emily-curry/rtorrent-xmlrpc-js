@@ -1,13 +1,16 @@
-import { BaseClient, BaseClientOpts } from './client/BaseClient';
+import { RPCClient, RPCClientOpts } from './util/RPCClient';
 import { RPCMethodName, RPCMethodParams, RPCMethodReturnType } from './types';
-import { Connection } from './conn/Connection';
+import { DownloadClient, LoadClient, SystemClient } from './client';
 
-export interface RTorrentClientOpts extends BaseClientOpts {}
+export interface RTorrentClientOpts extends RPCClientOpts {}
 
-export class RTorrentClient extends BaseClient {
+export class RTorrentClient {
+  private rpc: RPCClient;
   constructor(opts: RTorrentClientOpts) {
-    const conn = new Connection(opts.host, opts.port);
-    super(conn);
+    this.rpc = new RPCClient(opts);
+    this.d = new DownloadClient(this.rpc);
+    this.load = new LoadClient(this.rpc);
+    this.system = new SystemClient(this.rpc);
   }
 
   /**
@@ -18,8 +21,12 @@ export class RTorrentClient extends BaseClient {
   public async call<
     K extends RPCMethodName,
     P extends RPCMethodParams[K],
-    R extends RPCMethodReturnType<K, P>
+    R extends RPCMethodReturnType<K>
   >(methodName: K, ...params: P): Promise<R> {
-    return await this.rpcMethodCall<K, P, R>(methodName, ...params);
+    return await this.rpc.callRPCMethod(methodName, ...params);
   }
+
+  public d: DownloadClient;
+  public load: LoadClient;
+  public system: SystemClient;
 }

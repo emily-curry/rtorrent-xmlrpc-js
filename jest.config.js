@@ -1,6 +1,5 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
-const execa = require('execa');
 
 module.exports = {
   preset: 'ts-jest',
@@ -34,6 +33,9 @@ module.exports = {
   //   "\\\\node_modules\\\\"
   // ],
 
+  // Indicates which provider should be used to instrument code for coverage. Allowed values are babel (default) or v8.
+  // coverageProvider: 'babel',
+
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
   //   "json",
@@ -64,7 +66,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       packageJson: 'package.json',
-      tsConfig: 'tsconfig.esm.json'
+      tsConfig: 'tsconfig.json'
     }
   },
 

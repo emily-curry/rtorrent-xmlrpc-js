@@ -4,8 +4,8 @@ import { loadTorrentFiles } from './clientUtil';
 
 describe('d.* client methods', () => {
   beforeEach(async () => {
-    await client.call('d.multicall2', '', '', 'd.erase');
-    const hashes = await client.call('download_list', '', '');
+    await client.d.multicall2('', '', 'd.erase');
+    const hashes = await client.d.downloadList('', '');
     expect(hashes).toHaveLength(0);
   });
 
@@ -15,7 +15,7 @@ describe('d.* client methods', () => {
     const files = [torrents.debian];
     await loadTorrentFiles(files.map(i => i.file));
     const params = ['d.name', 'd.hash', 'd.state'] as const;
-    const multicallResult = await client.call('d.multicall2', '', '', ...params);
+    const multicallResult = await client.d.multicall2('', '', ...params);
     expect(multicallResult).toHaveLength(files.length);
     const hashResults = multicallResult.map(i => i[1]);
     for (const file of files) {
@@ -30,14 +30,14 @@ describe('d.* client methods', () => {
   });
 
   it('can erase a torrent with d.erase', async () => {
-    await client.call('load.raw', '', torrents.debian.file);
-    const hashes = await client.call('download_list', '', '');
+    await client.load.raw('', torrents.debian.file);
+    const hashes = await client.d.downloadList('', '');
     const hash = hashes[0];
     expect(hash).toBeDefined();
     expect(typeof hash).toBe('string');
-    const eraseResult = await client.call('d.erase', hash);
+    const eraseResult = await client.d.erase(hash);
     expect(eraseResult).toBe(0);
-    const hashesAfterErase = await client.call('download_list', '', '');
+    const hashesAfterErase = await client.d.downloadList('', '');
     expect(hashesAfterErase).toHaveLength(0);
   });
 });

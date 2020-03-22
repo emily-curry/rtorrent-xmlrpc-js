@@ -10,11 +10,12 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "prebuild": "rimraf {lib,esm}/*",
-    "build": "npm run build:cjs",
+    "prebuild": "rimraf {lib}/*",
+    "build": "npm run build:client && npm run build:cjs",
     "build:cjs": "tsc -p tsconfig.json",
     "build:client": "node ./clientGen.js",
-    "test": "jest --runInBand --coverage"
+    "test": "jest --runInBand --coverage",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "node-expat": "^2.3.18",

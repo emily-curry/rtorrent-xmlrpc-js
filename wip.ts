@@ -1,23 +1,28 @@
-import {
-  RPCMethodCallDescriptorLoad,
-  RPCMethodMulticallReturn,
-  RPCMethodCallDescriptorSystem,
-  RPCMethodSystemMulticallReturn
-} from './RPC';
-
-export interface DownloadRPCMethods {
-  ['d.multicall2']<C extends Exclude<keyof DownloadRPCMethods, 'd.multicall2'>[]>(
-    hash: '',
+interface Test {
+  ['d.name'](hash: string): Promise<string>;
+  ['d.multicall2'](
     view: string,
-    ...calls: C
-  ): Promise<RPCMethodMulticallReturn<C>>;
-  ['download_list'](hash: '', view: string): Promise<Array<string>>;
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
+  ): Promise<unknown>;
+  ['d.multicall.filtered'](
+    view: string,
+    predicate: unknown,
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
+  ): Promise<unknown>;
+  ['download_list'](view: string): Promise<unknown>;
+  ['d.name'](hash: string): Promise<string>;
   ['d.base_filename'](hash: string): Promise<string>;
   ['d.base_path'](hash: string): Promise<string>;
   ['d.directory'](hash: string): Promise<string>;
   ['d.directory_base'](hash: string): Promise<string>;
-  ['d.directory.set'](hash: string, value: string): Promise<0>;
-  ['d.directory_base.set'](hash: string, value: string): Promise<0>;
+  ['d.directory.set'](hash: string, path: string): Promise<0>;
+  ['d.directory_base.set'](hash: string, path: string): Promise<0>;
   ['d.state'](hash: string): Promise<0 | 1>;
   ['d.state_changed'](hash: string): Promise<number>;
   ['d.state_counter'](hash: string): Promise<number>;
@@ -39,9 +44,8 @@ export interface DownloadRPCMethods {
   ['d.delete_link'](type: string, path: string, suffix: string): Promise<0>;
   ['d.delete_tied'](hash: string): Promise<0>;
   ['d.creation_date'](hash: string): Promise<number>;
-  ['d.custom'](hash: string, key: string): Promise<string>;
-  ['d.custom_throw'](hash: string, key: string): Promise<string>;
-  ['d.custom.set'](hash: string, key: string, value: string): Promise<0>;
+  // d.custom[_throw] = ‹hash›, string ‹key› ≫ string ‹value› // FIXME:
+  ['d.custom.set'](hash: string, key: string, value: unknown): Promise<0>;
   ['d.custom1'](hash: string): Promise<string>;
   ['d.custom1.set'](hash: string, value: unknown): Promise<0>;
   ['d.custom.if_z'](hash: string, key: string, defaultValue: unknown): Promise<string>;
@@ -58,7 +62,6 @@ export interface DownloadRPCMethods {
   ['d.downloads_max.set'](hash: string, max: unknown): Promise<0>;
   ['d.downloads_min'](hash: string): Promise<number>;
   ['d.downloads_min.set'](hash: string, max: unknown): Promise<0>;
-  ['d.erase'](hash: string): Promise<0>;
   ['d.free_diskspace'](hash: string): Promise<number>;
   ['d.hash'](hash: string): Promise<string>;
   ['d.hashing'](hash: string): Promise<number>;
@@ -81,7 +84,6 @@ export interface DownloadRPCMethods {
   ['d.message'](hash: string): Promise<string>;
   ['d.message.set'](hash: string, message: unknown): Promise<0>;
   ['d.message.alert'](hash: string): Promise<number>;
-  ['d.name'](hash: string): Promise<string>;
   ['d.peer_exchange'](hash: string): Promise<0 | 1>;
   ['d.peer_exchange.set'](hash: string): Promise<0>;
   ['d.priority'](hash: string): Promise<number>;
@@ -102,9 +104,6 @@ export interface DownloadRPCMethods {
   ['d.tracker_size'](hash: string): Promise<number>;
   ['d.tracker_numwant'](hash: string): Promise<number>;
   ['d.tracker_numwant.set'](hash: string, numwant: unknown): Promise<0>;
-  ['d.tracker_scrape.downloaded'](target: string): Promise<number>;
-  ['d.tracker_scrape.complete'](target: string): Promise<number>;
-  ['d.tracker_scrape.incomplete'](target: string): Promise<number>;
   ['d.up.rate'](hash: string): Promise<number>;
   ['d.up.total'](hash: string): Promise<number>;
   ['d.update_priorities'](hash: string): Promise<0>;
@@ -113,14 +112,22 @@ export interface DownloadRPCMethods {
   ['d.uploads_min'](hash: string): Promise<number>;
   ['d.uploads_min.set'](hash: string, min: unknown): Promise<0>;
   ['d.wanted_chunks'](hash: string): Promise<number>;
-}
-
-export interface FileRPCMethods {
-  ['f.multicall']<C extends Exclude<keyof FileRPCMethods, 'f.multicall'>[]>(
+  //
+  ['view.add'](): Promise<unknown>;
+  ['view.sort_new'](): Promise<unknown>;
+  ['view.sort_current'](): Promise<unknown>;
+  // d.tracker_domain= d.name= // FIXME:
+  ['d.tracker_scrape.downloaded'](target: string): Promise<number>;
+  ['d.tracker_scrape.complete'](target: string): Promise<number>;
+  ['d.tracker_scrape.incomplete'](target: string): Promise<number>;
+  ['f.multicall'](
     infohash: string,
-    pattern: string,
-    ...calls: C
-  ): Promise<RPCMethodMulticallReturn<C>>;
+    pattern: unknown,
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
+  ): Promise<unknown>;
   ['f.completed_chunks'](infohash: string): Promise<number>;
   ['f.frozen_path'](infohash: string): Promise<string>;
   ['f.last_touched'](infohash: string): Promise<number>;
@@ -135,19 +142,27 @@ export interface FileRPCMethods {
   ['f.prioritize_last.disable'](infohash: string): Promise<0>;
   ['f.prioritize_last.enable'](infohash: string): Promise<0>;
   ['f.priority'](infohash: string): Promise<number>;
-  ['f.priority.set'](infohash: string, priority: number): Promise<0>;
+  ['f.priority.set'](infohash: string, priority: unknown): Promise<0>;
   ['f.size_bytes'](infohash: string): Promise<number>;
   ['f.size_chunks'](infohash: string): Promise<number>;
-}
-
-export interface PeerRPCMethods {
-  ['p.multicall']<C extends Exclude<keyof PeerRPCMethods, 'p.multicall'>[]>(
+  ['p.multicall'](
     infohash: string,
-    ...calls: C
-  ): Promise<RPCMethodMulticallReturn<C>>;
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
+  ): Promise<unknown>;
   ['p.address'](target: string): Promise<string>;
   ['p.banned'](target: string): Promise<0 | 1>;
   ['p.banned.set'](target: string): Promise<0>;
+  ['p.call_target'](
+    infohash: string,
+    peerhash: string,
+    cmd: unknown,
+    arg1: unknown,
+    arg2: unknown,
+    arg2?: unknown
+  ): Promise<0 | 1>;
   ['p.client_version'](target: string): Promise<string>;
   ['p.completed_percent'](target: string): Promise<number>;
   ['p.disconnect'](target: string): Promise<0>;
@@ -170,13 +185,13 @@ export interface PeerRPCMethods {
   ['p.snubbed.set'](target: string): Promise<0>;
   ['p.up_rate'](target: string): Promise<number>;
   ['p.up_total'](target: string): Promise<number>;
-}
-
-export interface TrackerRPCMethods {
-  ['t.multicall']<C extends Exclude<keyof TrackerRPCMethods, 't.multicall'>[]>(
+  ['t.multicall'](
     infohash: string,
-    ...calls: C
-  ): Promise<RPCMethodMulticallReturn<C>>;
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
+  ): Promise<unknown>;
   ['t.activity_time_last'](target: string): Promise<number>;
   ['t.activity_time_next'](target: string): Promise<number>;
   ['t.can_scrape'](target: string): Promise<0 | 1>;
@@ -208,56 +223,20 @@ export interface TrackerRPCMethods {
   ['t.success_time_next'](target: string): Promise<number>;
   ['t.type'](target: string): Promise<number>;
   ['t.url'](target: string): Promise<string>;
-}
-
-export interface LoadRPCMethods {
-  /**
-   * Loads a torrent from a url without starting the torrent.
-   * @param target Unused.
-   * @param url
-   * @param postLoadCommands
-   */
-  ['load.normal']<C extends RPCMethodCallDescriptorLoad[]>(
-    target: '',
-    url: string,
-    ...postLoadCommands: C
+  ['load.normal'](
+    metafile: string,
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
   ): Promise<0>;
-  /**
-   * Loads a torrent from a url and starts the torrent.
-   * @param target Unused.
-   * @param url
-   * @param postLoadCommands
-   */
-  ['load.start']<C extends RPCMethodCallDescriptorLoad[]>(
-    target: '',
-    url: string,
-    ...postLoadCommands: C
+  ['load.raw'](
+    metafileRaw: Buffer,
+    cmd1: unknown,
+    args: unknown,
+    cmd2: unknown,
+    cmd2?: unknown
   ): Promise<0>;
-  /**
-   * Loads a torrent from raw data without starting the torrent.
-   * @param target Unused.
-   * @param data
-   * @param postLoadCommands
-   */
-  ['load.raw']<C extends RPCMethodCallDescriptorLoad[]>(
-    target: '',
-    data: Buffer,
-    ...postLoadCommands: C
-  ): Promise<0>;
-  /**
-   * Loads a torrent from raw data and starts the torrent.
-   * @param target Unused.
-   * @param data
-   * @param postLoadCommands
-   */
-  ['load.raw_start']<C extends RPCMethodCallDescriptorLoad[]>(
-    target: '',
-    data: Buffer,
-    ...postLoadCommands: C
-  ): Promise<0>;
-}
-
-export interface SessionRPCMethods {
   ['session.name'](): Promise<string>;
   ['session.name.set'](name: string): Promise<0>;
   ['session.on_completion'](): Promise<0 | 1>;
@@ -267,25 +246,44 @@ export interface SessionRPCMethods {
   ['session.save'](): Promise<0>;
   ['session.use_lock'](): Promise<0 | 1>;
   ['session.use_lock.set'](value: boolean): Promise<0>;
-}
+  ['method.insert'](name: string, type: string, subType: unknown, definition?: string): Promise<0>;
+  ['method.insert.simple'](name: string, definition: string): Promise<0>;
+  ['method.insert.c_simple'](name: string, definition: string): Promise<0>;
+  ['method.insert.s_c_simple'](name: string, definition: string): Promise<0>;
+  ['method.insert.value'](name: string, defaultValue: unknown): Promise<0>;
+  ['method.insert.value'](): Promise<unknown>;
+  ['method.insert'](): Promise<unknown>;
+  ['method.set_key'](): Promise<unknown>;
+  ['method.set_key'](): Promise<unknown>;
+  ['method.set_key'](): Promise<unknown>;
+  ['method.const.enable'](): Promise<unknown>;
+  ['method.const'](name: string): Promise<0 | 1>;
+  ['method.const.enable'](name: string): Promise<0>;
+  ['method.get'](name: string): Promise<unknown>;
+  ['method.set_key'](name: string, key: string, definition?: string): Promise<0>;
+  ['method.has_key'](name: string, key: string): Promise<0 | 1>;
+  ['method.list_keys'](name: string): Promise<unknown>;
+  ['method.rlookup'](key: string): Promise<unknown>;
+  ['method.rlookup.clear'](key: string): Promise<0>;
+  ['method.redirect'](alias: string, target: string): Promise<0>;
+  ['event.view.hide'](newViewName: unknown): Promise<0>;
+  ['event.view.show'](oldViewName: unknown): Promise<0>;
+  ['method.set_key'](): Promise<unknown>;
+  ['method.set_key'](): Promise<unknown>;
+  ['schedule2'](name: string, start: number, interval: number, command: unknown): Promise<0>;
+  ['schedule_remove2'](name: string): Promise<0>;
+  ['close_low_diskspace'](limit: unknown): Promise<0>;
+  ['close_low_diskspace.normal'](limit: unknown): Promise<0>;
+  ['import'](rcFilePath: string): Promise<0>;
+  ['try_import'](rcFilePath: string): Promise<0>;
+  // execute.throw[.bg] = {command, arg1, arg2, ...} ≫ 0 // FIXME:
+  // execute.nothrow[.bg] = {command, arg1, arg2, ...} ≫ value ‹exit status›  // FIXME:
+  // execute.capture[_nothrow] = {command, arg1, arg2, ...} ≫ string ‹stdout› // FIXME:
 
-export interface ExecuteRPCMethods {
-  ['execute.throw'](command: string, ...args: string[]): Promise<0>;
-  ['execute.throw.bg'](command: string, ...args: string[]): Promise<0>;
-  ['execute.nothrow'](command: string, ...args: string[]): Promise<number>;
-  ['execute.nothrow.bg'](command: string, ...args: string[]): Promise<number>;
-  ['execute.capture'](command: string, ...args: string[]): Promise<string>;
-  ['execute.capture_nothrow'](command: string, ...args: string[]): Promise<string>;
-}
-
-export interface SystemRPCMethods {
-  ['system.multicall']<C extends RPCMethodCallDescriptorSystem[]>(
-    ...calls: C
-  ): Promise<RPCMethodSystemMulticallReturn<C>>;
-  ['system.listMethods'](): Promise<string[]>;
-  ['system.methodExist'](method: string): Promise<boolean>;
+  ['system.listMethods'](): Promise<unknown>;
+  ['system.methodExist'](method: string): Promise<0 | 1>;
   ['system.methodHelp'](method: string): Promise<string>;
-  ['system.methodSignature'](method: string): Promise<string>;
+  ['system.methodSignature'](method: unknown): Promise<string>;
   ['system.getCapabilities'](): Promise<unknown>;
   ['system.capabilities'](): Promise<unknown>;
   ['system.api_version'](): Promise<string>;
@@ -297,7 +295,8 @@ export interface SystemRPCMethods {
   ['system.colors.rgb'](): Promise<unknown>;
   ['system.cwd'](): Promise<string>;
   ['system.cwd.set'](path: string): Promise<0>;
-  ['system.env'](varname: string): Promise<string>;
+  ['system.env'](varname: unknown): Promise<string>;
+  ['session.path.set'](): Promise<unknown>;
   ['system.file.allocate'](): Promise<0 | 1>;
   ['system.file.allocate.set'](): Promise<0>;
   ['system.file_status_cache.size'](): Promise<number>;
@@ -309,6 +308,14 @@ export interface SystemRPCMethods {
   ['system.has.list'](): Promise<unknown>;
   ['system.has.private_methods'](): Promise<unknown>;
   ['system.has.public_methods'](): Promise<unknown>;
+  // system.capabilities FIXME:
+  // system.getCapabilities
+  // system.listMethods
+  // system.methodExist
+  // system.methodHelp
+  // system.methodSignature
+  // system.multicall
+  // system.shutdown
   ['system.hostname'](): Promise<string>;
   ['system.pid'](): Promise<number>;
   ['system.random'](lower: unknown, upper?: unknown): Promise<number>;
@@ -316,14 +323,103 @@ export interface SystemRPCMethods {
   ['system.time_seconds'](): Promise<number>;
   ['system.time_usec'](): Promise<number>;
   ['system.umask.set'](): Promise<number>;
+  // TODO: Continue from here
+  ['log.add_output'](scope: unknown, name: string): Promise<0>;
+  ['log.add_output'](): Promise<unknown>;
+  ['log.execute'](path: string): Promise<0>;
+  ['log.xmlrpc'](path: string): Promise<0>;
+  ['log.open_file'](name: string, logfilePath: string, scope: unknown): Promise<0>;
+  // log.open_gz_file FIXME
+  // log.open_file_pid
+  // log.open_gz_file_pid
+  ['log.open_file_pid'](): Promise<unknown>;
+  ['log.vmmap.dump'](dumpfilePath: string): Promise<0>;
+  ['log.messages'](logFilePath: unknown): Promise<0>;
+  ['network.http.dns_cache_timeout.set'](seconds: number): Promise<0>;
+  ['network.http.dns_cache_timeout'](): Promise<number>;
+  ['network.http.current_open'](): Promise<number>;
+  ['network.http.max_open'](): Promise<number>;
+  ['network.http.max_open.set'](max: unknown): Promise<0>;
+  ['network.receive_buffer.size'](): Promise<number>;
+  ['network.receive_buffer.size.set'](size: unknown): Promise<0>;
+  ['network.send_buffer.size'](): Promise<number>;
+  ['network.send_buffer.size.set'](size: unknown): Promise<0>;
+  ['network.scgi.dont_route'](): Promise<0 | 1>;
+  ['network.scgi.dont_route.set'](bool: unknown): Promise<0>;
+  ['network.scgi.open_local'](path: string): Promise<0>;
+  ['network.scgi.open_port'](domain_or_ip: unknown, port: unknown): Promise<0>;
+  ['network.tos.set'](flag: unknown): Promise<0>;
+  ['network.xmlrpc.dialect.set'](): Promise<0>;
+  ['network.xmlrpc.size_limit'](): Promise<number>;
+  ['network.xmlrpc.size_limit.set'](maxSize: unknown): Promise<0>;
+  ['network.history.depth.set'](): Promise<unknown>;
+  ['method.insert'](): Promise<unknown>;
+  ['method.insert'](): Promise<unknown>;
+  ['schedule2'](): Promise<unknown>;
+  ['schedule2'](): Promise<unknown>;
+  ['dht.add_node'](host: string): Promise<0>;
+  ['dht.mode.set'](mode: unknown): Promise<0>;
+  ['dht'](mode: unknown): Promise<0>;
+  ['dht.port'](): Promise<number>;
+  ['dht.mode.set'](port: unknown): Promise<0>;
+  ['dht_port'](port: unknown): Promise<0>;
+  ['pieces.hash.on_completion'](): Promise<0 | 1>;
+  ['pieces.hash.on_completion.set'](): Promise<0>;
+  ['pieces.memory.block_count'](): Promise<number>;
+  ['pieces.memory.current'](): Promise<number>;
+  ['pieces.memory.max'](): Promise<number>;
+  ['pieces.memory.max.set'](bytes: unknown): Promise<0>;
+  ['pieces.memory.sync_queue'](): Promise<number>;
+  ['pieces.preload.min_rate'](): Promise<number>;
+  ['pieces.preload.min_rate.set'](bytes: unknown): Promise<0>;
+  ['pieces.preload.min_size'](): Promise<number>;
+  ['pieces.preload.min_size.set'](chunks: unknown): Promise<0>;
+  ['pieces.preload.type'](): Promise<number>;
+  ['pieces.preload.type.set'](enumValue: unknown): Promise<0>;
+  ['pieces.stats_not_preloaded'](): Promise<number>;
+  ['pieces.stats_preloaded'](): Promise<number>;
+  ['pieces.stats.total_size'](): Promise<number>;
+  ['pieces.sync.always_safe'](): Promise<0 | 1>;
+  ['pieces.sync.always_safe.set'](): Promise<0>;
+  ['pieces.sync.queue_size'](): Promise<number>;
+  ['pieces.sync.safe_free_diskspace'](): Promise<number>;
+  ['pieces.sync.timeout'](): Promise<number>;
+  ['pieces.sync.timeout.set'](seconds: unknown): Promise<0>;
+  ['pieces.sync.timeout_safe'](): Promise<number>;
+  ['pieces.sync.timeout_safe.set'](seconds: unknown): Promise<0>;
+  ['protocol.encryption.set'](flags: unknown): Promise<0>;
+  ['protocol.pex'](): Promise<0 | 1>;
+  ['protocol.pex.set'](): Promise<0>;
+  ['throttle.down'](name: string, rate: unknown): Promise<0>;
+  ['throttle.up'](name: string, rate: unknown): Promise<0>;
+  ['throttle.down.max'](name: string): Promise<number>;
+  ['throttle.up.max'](name: string): Promise<number>;
+  ['throttle.down.rate'](name: string): Promise<number>;
+  ['throttle.up.rate'](name: string): Promise<number>;
+  ['throttle.global_down.rate'](): Promise<number>;
+  ['throttle.global_up.rate'](): Promise<number>;
+  ['throttle.global_down.total'](): Promise<number>;
+  ['throttle.global_up.total'](): Promise<number>;
+  ['throttle.ip'](throttleName: unknown, domainOrIP: unknown): Promise<0>;
+  // throttle.names= ≫ array ‹names› // FIXME:
+  ['ui.current_view.set'](viewname: unknown): Promise<0>;
+  ['ui.current_view'](): Promise<string>;
+  ['ui.bind_key'](display: unknown, key: string): Promise<0>;
+  ['ui.bind_key.verbose'](): Promise<0 | 1>;
+  ['ui.bind_key.verbose.set'](mode: unknown): Promise<0>;
+  // ui.color.‹type›= ≫ string ‹color-spec› // FIXME:
+  // ui.color.‹type›.set=‹color-spec› ≫ 0
+  ['ui.column.spec'](columnIndex: unknown): Promise<string>;
+  ['ui.column.hide'](columnIndex: unknown): Promise<0>;
+  ['ui.column.show'](columnIndex: unknown): Promise<0>;
+  ['ui.column.is_hidden'](columnIndex: unknown): Promise<0 | 1>;
+  ['ui.column.hidden.list'](): Promise<unknown>;
+  // view.collapsed.toggle=‹view-name› ≫ 0 // FIXME:
+  ['directory.watch.added'](rootFolderPath: unknown, handlerCommandName: unknown): Promise<0>;
+  ['directory.watch.added'](): Promise<unknown>;
+  ['trackers.alias.set_key'](): Promise<unknown>;
+  ['method.use_deprecated'](): Promise<0 | 1>;
+  ['method.use_deprecated.set'](bool: unknown): Promise<0 | 1>;
+  ['method.use_intermediate'](): Promise<number>;
+  ['method.use_intermediate.set'](): Promise<number>;
 }
-
-/** An interface that describes the signatures of all RPC methods, indexed by thier RPC method name. */
-export type RPCMethods = DownloadRPCMethods &
-  FileRPCMethods &
-  PeerRPCMethods &
-  TrackerRPCMethods &
-  LoadRPCMethods &
-  SessionRPCMethods &
-  ExecuteRPCMethods &
-  SystemRPCMethods;
