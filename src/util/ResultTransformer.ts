@@ -35,16 +35,9 @@ export class ResultTransformer {
 
 // TODO: Until decorators are implemented, explicitly register all transforms here
 
-ResultTransformer.register(['system.multicall'], (methodName, params: Array<any>) => {
-  return params.map(i => {
+ResultTransformer.register(['system.multicall'], (methodName, result: Array<any>) => {
+  return result.map(i => {
     if (Array.isArray(i)) return i[0];
-    else if (typeof i === 'object' && i.hasOwnProperty('faultString')) {
-      return new RPCError(
-        `RPC Fault: ${i['faultString']}`,
-        i['faultString'],
-        i['faultCode'],
-        i['faultCode']
-      );
-    } else throw new Error(`Unknown data type returned from system.multicall: ${i}`);
+    else throw new Error(`Unknown data type returned from system.multicall: ${i}`);
   });
 });

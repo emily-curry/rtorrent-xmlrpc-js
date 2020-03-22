@@ -1,6 +1,7 @@
 import { client } from './clientSetup';
 import { torrents } from './torrents';
 import { RPCError } from '../src';
+import { RPCAggregateError } from '../src/conn/RPCError';
 
 describe('system.* client methods', () => {
   beforeEach(async () => {
@@ -16,8 +17,7 @@ describe('system.* client methods', () => {
       { methodName: 'load.raw', params: ['', torrents.debian.file] },
       { methodName: 'system.listMethods', params: [] },
       { methodName: 'system.methodExist', params: ['d.fake'] },
-      { methodName: 'system.methodExist', params: ['d.name'] },
-      { methodName: 'd,st' as any, params: [] }
+      { methodName: 'system.methodExist', params: ['d.name'] }
     );
     expect(result).toBeDefined();
     const downloadList = await client.d.downloadList('', '');
@@ -26,7 +26,16 @@ describe('system.* client methods', () => {
     expect(result[1]).toContain('system.multicall');
     expect(result[2]).toBe(false);
     expect(result[3]).toBe(true);
-    expect(result[4]).toBeInstanceOf(RPCError);
+  });
+
+  it('can generate an exception while calling multiple methods at once with system.multicall', async () => {
+    const promise = client.system.multicall(
+      { methodName: 'load.raw', params: ['', torrents.debian.file] },
+      { methodName: 'system.listMethods', params: [] },
+      { methodName: 'd,st' as any, params: [] }
+    );
+    await expect(promise).rejects.toBeInstanceOf(RPCAggregateError);
+    await expect(promise).rejects.toHaveProperty('innerErrors.0.faultCode', -506);
   });
 
   it('can call multiple multicall methods at once with system.multicall', async () => {

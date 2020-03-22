@@ -1,7 +1,7 @@
 import { Readable } from 'stream';
 import { Parser } from 'node-expat';
 import DateFormatter from 'xmlrpc/lib/date_formatter';
-import { RPCError } from './RPCError';
+import { RPCError, RPCAggregateError } from './RPCError';
 
 /**
  * Utility for deserializng streams of XML data.
@@ -55,6 +55,11 @@ export class XMLDeserializer {
       throw new Error('Invalid XML-RPC message');
     } else if (this.responseType === 'fault') {
       throw this.createFaultError(this.stack[0]);
+    } else if (
+      Array.isArray(this.stack[0]) &&
+      this.stack[0].some(i => typeof i === 'object' && i.hasOwnProperty('faultCode'))
+    ) {
+      throw this.createAggregateFaultError(this.stack[0]);
     }
     return this.stack;
   };
@@ -95,13 +100,31 @@ export class XMLDeserializer {
     return result[0];
   };
 
-  private createFaultError(fault: any): RPCError {
+  private createFaultError(fault: {
+    faultString: string;
+    faultCode: number;
+    code?: number;
+  }): RPCError {
     return new RPCError(
       `XML-RPC fault: ${fault.faultString ?? 'Unknown'}`,
       fault.faultString,
-      fault.code,
+      fault.code ?? fault.faultCode,
       fault.faultCode
     );
+  }
+
+  private createAggregateFaultError(maybeFaults: any[]): RPCAggregateError {
+    const rpcErrors = new Map<number, RPCError>();
+    for (let i = 0; i < maybeFaults.length; i++) {
+      const item = maybeFaults[i];
+      if (typeof item === 'object' && item.hasOwnProperty('faultCode')) {
+        rpcErrors.set(i, this.createFaultError(item));
+      }
+    }
+    const aggregateMessage = `XML-RPC faults occurred in result indices [ ${[
+      ...rpcErrors.keys()
+    ].join(', ')} ]`;
+    throw new RPCAggregateError(aggregateMessage, [...rpcErrors.values()]);
   }
 
   private push = (value: any) => {
