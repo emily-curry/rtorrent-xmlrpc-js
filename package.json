@@ -14,8 +14,8 @@
     "build": "npm run build:cjs",
     "build:cjs": "tsc -p tsconfig.json",
     "build:client": "node ./clientGen.js",
-    "pretest": "npm run build:client",
-    "test": "jest --runInBand --coverage",
+    "test": "jest --runInBand",
+    "test:coverage": "npm run test -- --coverage",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
