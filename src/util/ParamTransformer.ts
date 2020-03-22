@@ -52,10 +52,10 @@ ParamTransformer.register(['p.multicall', 't.multicall'], (methodName, params) =
 
 ParamTransformer.register(['system.multicall'], (methodName, params, context) => {
   return [
-    params.map(p => ({
+    params.map((p) => ({
       methodName: p.methodName,
-      params: context.transform(p.methodName, p.params, context)
-    }))
+      params: context.transform(p.methodName, p.params, context),
+    })),
   ];
 });
 
@@ -71,9 +71,9 @@ ParamTransformer.register(
     return [
       target,
       file,
-      ...(post as Array<RPCMethodCallDescriptorLoad>).map(i => {
+      ...(post as Array<RPCMethodCallDescriptorLoad>).map((i) => {
         return `${i.methodName}=${(i.params as any).map(paramCoerce).join(',')}`;
-      })
+      }),
     ];
   }
 );

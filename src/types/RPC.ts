@@ -1,4 +1,5 @@
-import { DownloadRPCMethods, RPCMethods } from './RPCMethods';
+import { DownloadRPCMethods } from './methods/DownloadRPCMethods';
+import { RPCMethods } from './RPCMethods';
 import { ExtractTuple, Tail } from './util';
 
 /** A union describing all valid XMLRPC method names. */

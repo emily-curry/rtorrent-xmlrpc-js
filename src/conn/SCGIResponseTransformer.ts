@@ -9,7 +9,7 @@ export class SCGIResponseTransformer extends Transform {
   constructor() {
     super({
       readableObjectMode: true,
-      writableObjectMode: false
+      writableObjectMode: false,
     });
   }
 

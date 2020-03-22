@@ -10,7 +10,7 @@ devDependencies:
   dotenv: 8.2.0
   execa: 4.0.0
   jest: 25.1.0
-  prettier: 1.19.1
+  prettier: 2.0.1
   rimraf: 3.0.2
   ts-jest: 25.2.1_jest@25.1.0
   typescript: 3.8.3
@@ -2798,13 +2798,13 @@ packages:
       node: '>= 0.8.0'
     resolution:
       integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
-  /prettier/1.19.1:
+  /prettier/2.0.1:
     dev: true
     engines:
-      node: '>=4'
+      node: '>=10.13.0'
     hasBin: true
     resolution:
-      integrity: sha512-s7PoyDv/II1ObgQunCbB9PdLmUcBZcnWOcxDh7O0N/UwDEsHyqkW+Qh28jW+mVuCdx7gLB0BotYI1Y6uI9iyew==
+      integrity: sha512-piXGBcY1zoFOG0MvHpNE5reAGseLmaCRifQ/fmfF49BcYkInEs/naD/unxGNAeOKFA5+JxVrPyMvMlpzcd20UA==
   /pretty-format/25.1.0:
     dependencies:
       '@jest/types': 25.1.0
@@ -3741,7 +3741,7 @@ specifiers:
   execa: ^4.0.0
   jest: ^25.1.0
   node-expat: ^2.3.18
-  prettier: ^1.19.1
+  prettier: ^2.0.1
   rimraf: ^3.0.2
   ts-jest: ^25.2.1
   tslib: ^1.11.1

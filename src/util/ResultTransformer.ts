@@ -36,7 +36,7 @@ export class ResultTransformer {
 // TODO: Until decorators are implemented, explicitly register all transforms here
 
 ResultTransformer.register(['system.multicall'], (methodName, result: Array<any>) => {
-  return result.map(i => {
+  return result.map((i) => {
     if (Array.isArray(i)) return i[0];
     else throw new Error(`Unknown data type returned from system.multicall: ${i}`);
   });

@@ -15,7 +15,7 @@ export class Connection {
 
     const scgiHeaderItems = [
       `CONTENT_LENGTH${NULL_CHAR}${xmlLength}${NULL_CHAR}`,
-      `SCGI${NULL_CHAR}1${NULL_CHAR}`
+      `SCGI${NULL_CHAR}1${NULL_CHAR}`,
     ];
 
     const headerLength = scgiHeaderItems.reduce(

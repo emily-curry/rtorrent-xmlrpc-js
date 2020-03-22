@@ -36,10 +36,7 @@ export class XMLDeserializer {
         this.onError(err).catch(reject);
       };
       const onComplete = () => {
-        this.onDone()
-          .then(this.onMethodReponseComplete)
-          .then(resolve)
-          .catch(reject);
+        this.onDone().then(this.onMethodReponseComplete).then(resolve).catch(reject);
       };
       stream.on('error', onError);
       this.parser.on('error', onError);
@@ -57,7 +54,7 @@ export class XMLDeserializer {
       throw this.createFaultError(this.stack[0]);
     } else if (
       Array.isArray(this.stack[0]) &&
-      this.stack[0].some(i => typeof i === 'object' && i.hasOwnProperty('faultCode'))
+      this.stack[0].some((i) => typeof i === 'object' && i.hasOwnProperty('faultCode'))
     ) {
       throw this.createAggregateFaultError(this.stack[0]);
     }
@@ -122,7 +119,7 @@ export class XMLDeserializer {
       }
     }
     const aggregateMessage = `XML-RPC faults occurred in result indices [ ${[
-      ...rpcErrors.keys()
+      ...rpcErrors.keys(),
     ].join(', ')} ]`;
     throw new RPCAggregateError(aggregateMessage, [...rpcErrors.values()]);
   }

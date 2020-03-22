@@ -3,6 +3,6 @@ export {
   RPCMethodName,
   RPCMethodCallDescriptorSystem,
   RPCMethodCallDescriptorLoad,
-  RPCMethodReturnType
+  RPCMethodReturnType,
 } from './RPC';
 export { RPCMethods } from './RPCMethods';
