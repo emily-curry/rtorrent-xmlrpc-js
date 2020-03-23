@@ -80,13 +80,6 @@ const clientMeta = [
 
 const methodNameRegex = /[\._](\w)/g;
 
-const writeMethodPostTransforms = {
-  'd.multicall2': (text) => `${text.slice(0, text.length - 1)} as any;`,
-};
-
-const postTransform = (rpcMethodName, text) =>
-  writeMethodPostTransforms[rpcMethodName] ? writeMethodPostTransforms[rpcMethodName](text) : text;
-
 /**
  * @param {string} clientName
  * @param {string} prefix
@@ -107,14 +100,14 @@ export class ${clientName} {
       const methodName = rpcMethodName
         .replace(prefix, '')
         .replace(methodNameRegex, (m, p1) => p1.toUpperCase());
-      const methodSignature = `<P extends RPCMethodParams['${rpcMethodName}']>(...params: P) => this.rpc.callRPCMethod('${rpcMethodName}', ...params);`;
+      const methodSignature = `<P extends RPCMethodParams['${rpcMethodName}']>(...params: P) => {\n    return this.rpc.callRPCMethod('${rpcMethodName}', ...params);\n  }`;
       const classMethod = `public ${methodName}: RPCMethods['${rpcMethodName}'] = ${methodSignature}`;
       const comments = m
         .getFullText(source)
         .slice(0, m.getLeadingTriviaWidth(source))
         .replace(/^\n\s+/, '');
       const fullText = `${comments}${classMethod}`;
-      return postTransform(rpcMethodName, fullText);
+      return fullText;
     })
     .join('\n  ')}
 }

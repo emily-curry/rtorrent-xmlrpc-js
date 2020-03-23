@@ -10,14 +10,20 @@ export class ProtocolClient {
    * @param flags A comma seperated list of flags.
    * @see https://rtorrent-docs.readthedocs.io/en/latest/cmd-ref.html#term-protocol-encryption-set
    */
-  public encryptionSet: RPCMethods['protocol.encryption.set'] = <P extends RPCMethodParams['protocol.encryption.set']>(...params: P) => this.rpc.callRPCMethod('protocol.encryption.set', ...params);
+  public encryptionSet: RPCMethods['protocol.encryption.set'] = <P extends RPCMethodParams['protocol.encryption.set']>(...params: P) => {
+    return this.rpc.callRPCMethod('protocol.encryption.set', ...params);
+  }
   /**
    *
    */
-  public pex: RPCMethods['protocol.pex'] = <P extends RPCMethodParams['protocol.pex']>(...params: P) => this.rpc.callRPCMethod('protocol.pex', ...params);
+  public pex: RPCMethods['protocol.pex'] = <P extends RPCMethodParams['protocol.pex']>(...params: P) => {
+    return this.rpc.callRPCMethod('protocol.pex', ...params);
+  }
   /**
    *
    * @param value
    */
-  public pexSet: RPCMethods['protocol.pex.set'] = <P extends RPCMethodParams['protocol.pex.set']>(...params: P) => this.rpc.callRPCMethod('protocol.pex.set', ...params);
+  public pexSet: RPCMethods['protocol.pex.set'] = <P extends RPCMethodParams['protocol.pex.set']>(...params: P) => {
+    return this.rpc.callRPCMethod('protocol.pex.set', ...params);
+  }
 }

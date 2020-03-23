@@ -13,11 +13,11 @@ describe('d.* client methods', () => {
 
   it('can perform multicalls with d.multicall2', async () => {
     const files = [torrents.debian];
-    await loadTorrentFiles(files.map(i => i.file));
+    await loadTorrentFiles(files.map((i) => i.file));
     const params = ['d.name', 'd.hash', 'd.state'] as const;
     const multicallResult = await client.d.multicall2('', '', ...params);
     expect(multicallResult).toHaveLength(files.length);
-    const hashResults = multicallResult.map(i => i[1]);
+    const hashResults = multicallResult.map((i) => i[1]);
     for (const file of files) {
       expect(hashResults).toContain(file.hash);
     }

@@ -30,7 +30,7 @@ describe('load.* client methods', () => {
 
     const postActions: RPCMethodCallDescriptorLoad[] = [
       { methodName: 'd.directory.set', params: [testDir] },
-      { methodName: 'd.custom.set', params: ['key', 'value'] }
+      { methodName: 'd.custom.set', params: ['key', 'value'] },
     ];
     const result = await client.load.raw('', torrents.debian.file, ...postActions);
     expect(result).toBe(0);

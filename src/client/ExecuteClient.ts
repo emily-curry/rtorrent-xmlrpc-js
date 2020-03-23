@@ -10,35 +10,47 @@ export class ExecuteClient {
    * @param command
    * @param args
    */
-  public throw: RPCMethods['execute.throw'] = <P extends RPCMethodParams['execute.throw']>(...params: P) => this.rpc.callRPCMethod('execute.throw', ...params);
+  public throw: RPCMethods['execute.throw'] = <P extends RPCMethodParams['execute.throw']>(...params: P) => {
+    return this.rpc.callRPCMethod('execute.throw', ...params);
+  }
   /**
    *
    * @param command
    * @param args
    */
-  public throwBg: RPCMethods['execute.throw.bg'] = <P extends RPCMethodParams['execute.throw.bg']>(...params: P) => this.rpc.callRPCMethod('execute.throw.bg', ...params);
+  public throwBg: RPCMethods['execute.throw.bg'] = <P extends RPCMethodParams['execute.throw.bg']>(...params: P) => {
+    return this.rpc.callRPCMethod('execute.throw.bg', ...params);
+  }
   /**
    *
    * @param command
    * @param args
    */
-  public nothrow: RPCMethods['execute.nothrow'] = <P extends RPCMethodParams['execute.nothrow']>(...params: P) => this.rpc.callRPCMethod('execute.nothrow', ...params);
+  public nothrow: RPCMethods['execute.nothrow'] = <P extends RPCMethodParams['execute.nothrow']>(...params: P) => {
+    return this.rpc.callRPCMethod('execute.nothrow', ...params);
+  }
   /**
    *
    * @param command
    * @param args
    */
-  public nothrowBg: RPCMethods['execute.nothrow.bg'] = <P extends RPCMethodParams['execute.nothrow.bg']>(...params: P) => this.rpc.callRPCMethod('execute.nothrow.bg', ...params);
+  public nothrowBg: RPCMethods['execute.nothrow.bg'] = <P extends RPCMethodParams['execute.nothrow.bg']>(...params: P) => {
+    return this.rpc.callRPCMethod('execute.nothrow.bg', ...params);
+  }
   /**
    *
    * @param command
    * @param args
    */
-  public capture: RPCMethods['execute.capture'] = <P extends RPCMethodParams['execute.capture']>(...params: P) => this.rpc.callRPCMethod('execute.capture', ...params);
+  public capture: RPCMethods['execute.capture'] = <P extends RPCMethodParams['execute.capture']>(...params: P) => {
+    return this.rpc.callRPCMethod('execute.capture', ...params);
+  }
   /**
    *
    * @param command
    * @param args
    */
-  public captureNothrow: RPCMethods['execute.capture_nothrow'] = <P extends RPCMethodParams['execute.capture_nothrow']>(...params: P) => this.rpc.callRPCMethod('execute.capture_nothrow', ...params);
+  public captureNothrow: RPCMethods['execute.capture_nothrow'] = <P extends RPCMethodParams['execute.capture_nothrow']>(...params: P) => {
+    return this.rpc.callRPCMethod('execute.capture_nothrow', ...params);
+  }
 }

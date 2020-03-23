@@ -10,7 +10,7 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "prebuild": "rimraf {lib}/* && npm run build:client",
+    "prebuild": "rimraf lib/* && npm run build:client",
     "build": "npm run build:cjs",
     "build:cjs": "tsc -p tsconfig.json",
     "build:client": "node ./clientGen.js",
