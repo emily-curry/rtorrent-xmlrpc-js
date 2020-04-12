@@ -48,7 +48,12 @@ export class RTorrentClient {
     K extends RPCMethodName,
     P extends RPCMethodParams[K],
     R extends RPCMethodReturnType<K>
-  >(methodName: K, ...params: P): Promise<R> {
+  >(methodName: K, ...params: P): Promise<R>;
+  public async call<K extends string, P extends any[], R extends any>(
+    methodName: K,
+    ...params: P
+  ): Promise<R>;
+  public async call(methodName: any, ...params: any[]): Promise<any> {
     return await this.rpc.callRPCMethod(methodName, ...params);
   }
 
